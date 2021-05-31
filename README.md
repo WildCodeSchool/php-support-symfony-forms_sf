@@ -59,29 +59,9 @@ Ainsi que, encore une fois, les getters et setters associés.
 
 Tu peux te dire que ça fait potentiellement beaucoup de code à écrire, mais ne t'inquiète pas, le *binaire Symfony* est là pour t'aider 😉.
 
-### DES "MIGRATIONS"? C'EST UNE HISTOIRE D'OISEAUX ÇA, NON?
+### À TOI DE JOUER!
 
-"Ok, jusque là, ça va, mais qu'en est-il des tables dans ma base de données?"
-
-Et bien, tu n'as pas à t'en occuper, justement! À chaque fois que tu vas ajouter ou faire une modification sur une entité (donc dans une *classe suivie par Doctrine* du namespace `App\Entity` dans le dossier `/src/Entity`), tu vas pouvoir créer une *migration*. Une *migration* est un type de classe Symfony contenant des requêtes d'administration de base de données (en gros, des *"CREATE TABLE"*, *"ALTER TABLE"*, etc...).
-
-Ensuite, une fois que tu as créé une migration, il te suffit de la lancer pour appliquer les modifications à ta base de donnée 🙂.
-
-Tu pourrais très bien faire tout ça toi même à la main, mais ici aussi, le *binaire Symfony* est ton ami 😉. En plus, il se charge même de créer les clés étrangères et les tables intermédiaires quand tu as besoin de créer des relations entre tes entités! 🤩
-
-Aussi, ce principe de migrations permet à toutes les personnes qui récupèrent un projet Symfony de récupérer aussi la structure de base de données qui va avec : il leur suffit juste de lancer toutes les migrations dans l'ordre au moment d'installer le projet, et hop, elles ont une base de donnée dans son état le plus récent!
-
-### ET DES "REPOSITORY"? MAIS QUE VIENT FAIRE GITHUB DANS TOUT ÇA?
-
-Ici, rien à voir avec les *repo GitHub*. En fait, les *Repository* ressemblent aux *Manager* du Simple-MVC. En effet, les *Entity* définissent la *forme* des choses que tu veux représenter, mais tu remarques que nulle part nous n'avons défini de méthodes permettant *d'interagir* avec ces entités en base de données (c'est à dire faire des requêtes de type *"INSERT INTO"* ou *"SELECT"*, par exemple) 🤔.
-
-Et bien c'est justement le but des *Repository* en Symfony. Et comme avec le Simple-MVC, ces *Repository* possèdent un certain nombre de méthodes "prédéfinies", mais de façon beaucoup plus puissante que dans le Simple-MVC (en réalité, elles sont *fabriquées à la volée* 😉).
-
-Dans la majorité des cas (mais pas dans *tous* les cas ❗), tu laisseras donc Symfony s'occuper de générer ces classes-ci automatiquement (encore grâce au *binaire Symfony*, je t'avais bien dit que ça allait être ton nouveau meilleur ami 😉), et tu n'auras pas souvent besoin d'aller les modifier "à la main" 🙂.
-
-## À TOI DE JOUER!
-
-Trèves de bavardages, essayons un peu tout ça!
+Trèves de bavardages, essayons tout ça!
 
 Le projet que tu as récupéré est assez vide, et le but ne vas pas nécessairement être de travailler sur des contrôleurs et des vues, mais de se concentrer sur la création d'entités et la gestions des relations entre celles-ci.
 
@@ -93,14 +73,14 @@ En effet, avant tout chose, il faut créer une base de données avec les informa
 
 * Tu utilises l'utilisateur `root` ou un utilisateur générique ayant tous les droits nécessaires à la création et l'administration d'une base de données : dans ce cas, lance `bin/console doctrine:database:create` (ou `bin/console d:d:c`), et voilà, si tu as bien configuré ton fichier `.env.local`, tu ne devrais pas avoir d'erreur et avoir créé ta base de données 🙂;
 
-* Tu décides de travailler avec un utilisateur spécifique à ton projet, dans ce cas : il faut que tu lances ton serveur de gestion de bases de données, que tu crées ta base et l'utilisateur qui va avec, et que tu lui donne les droits sur cette base à la main - en effet, Doctrine ne prend pas en charge la création/gestion des utilisateurs, mais uniquement celles des bases de données. Tu peux ensuite lancer `bin/console doctrine:database:drop --force` (ou `bin/console d:d:d --force`) - si tu n'as pas d'erreur, c'est que ta database a bien été *supprimée* et donc qu'elle est bien configurée pour Doctrine, et tu peux lancer `bin/console d:d:c` pour la recréer 😉.
+* Tu décides de travailler avec un utilisateur spécifique à ton projet, dans ce cas : il faut que tu lances ton serveur de gestion de bases de données, que tu crées ta base et l'utilisateur qui va avec, et que tu lui donnes les droits sur cette base à la main - en effet, Doctrine ne prend pas en charge la création/gestion des utilisateurs, mais uniquement celles des bases de données. Tu peux ensuite lancer `bin/console doctrine:database:drop --force` (ou `bin/console d:d:d --force`) - si tu n'as pas d'erreur, c'est que ta database a bien été *supprimée* et donc qu'elle est bien configurée pour Doctrine, et tu peux lancer `bin/console d:d:c` pour la recréer 😉.
 
 ### "OK, ET MAINTENANT ON CODE L'ENTITÉ ET LE REPO POUR MES CHATS, C'EST ÇA?"
 
 Disons que nous voulons que nos chats soient représentés par :
 
 * leur nom,
-* une photo (sous la forme d'une url*),
+* une photo (sous la forme d'une url),
 
 et c'est tout.
 
@@ -137,9 +117,29 @@ Next: When you're ready, create a migration with php bin/console make:migration
 
 Bref, tout ça en répondant vite fait à quelques questions en lignes de commande, c'est quand même bien cool! 🤩
 
-### "ET DU COUP MAINTENANT ON MIGRE, C'EST CHAT?"
+### DES "REPOSITORY"? MAIS QUE VIENT FAIRE GITHUB DANS TOUT ÇA?
 
-Yup! Maintenant qu'on a fait le côté POO, il faut s'occuper du côté BDD. En effet, si tu vas voir dans ton serveur MySQL, tu remarqueras que pour l'instant, il ne s'est rien passé dans ta base de données.
+Ici, rien à voir avec les *repo GitHub*. En fait, les *Repository* ressemblent aux *Manager* du Simple-MVC. En effet, les *Entity* définissent la *forme* des choses que tu veux représenter, mais tu remarques que nulle part nous n'avons défini de méthodes permettant *d'interagir* avec ces entités en base de données (c'est à dire faire des requêtes de type *"INSERT INTO"* ou *"SELECT"*, par exemple) 🤔.
+
+Et bien c'est justement le but des *Repository* en Symfony. Et comme avec le Simple-MVC, ces *Repository* possèdent un certain nombre de méthodes "prédéfinies", mais de façon beaucoup plus puissante que dans le Simple-MVC (en réalité, elles sont *fabriquées à la volée* 😉).
+
+Dans la majorité des cas (mais pas dans *tous* les cas ❗), tu laisseras donc Symfony s'occuper de générer ces classes-ci automatiquement (comme ici dans notre cas, à l'étape précédente 😉), et tu n'auras pas souvent besoin d'aller les modifier "à la main" 🙂.
+
+### ET DES "MIGRATIONS"? C'EST UNE HISTOIRE D'OISEAUX ÇA, NON?
+
+"Ok, jusque là, ça va, mais qu'en est-il des tables dans ma base de données? Et pourquoi le binaire Symfony me dit de migrer après avoir crée mon entité? Et migrer où???"
+
+Pas de panique, là encore, le *binaire Symfony* est là pour t'aider! 🙂 En effet, tu n'auras pas besoin de t'occuper toi même de tes tables dans ta base de données. À chaque fois que tu vas ajouter ou faire une modification sur une entité (donc dans une *classe suivie par Doctrine* du namespace `App\Entity` dans le dossier `/src/Entity`), tu vas pouvoir créer une *migration*. Une *migration* est un type de classe Symfony contenant des requêtes d'administration de base de données (en gros, des *"CREATE TABLE"*, *"ALTER TABLE"*, etc...).
+
+Ensuite, une fois que tu as créé une migration, il te suffit de la lancer pour appliquer les modifications à ta base de données 🙂.
+
+Tu pourrais très bien faire tout ça toi même à la main, mais ici aussi, le *binaire Symfony* est ton ami 😉. En plus, il se charge même de créer les clés étrangères et les tables intermédiaires quand tu as besoin de créer des relations entre tes entités! 🤩
+
+Aussi, ce principe de migrations permet à toutes les personnes qui récupèrent un projet Symfony de récupérer aussi la structure de base de données qui va avec : il leur suffit juste de lancer toutes les migrations dans l'ordre au moment d'installer le projet, et hop, elles ont une base de donnée dans son état le plus récent!
+
+### "OK, DU COUP MAINTENANT ON MIGRE, C'EST CHAT?"
+
+Yup! Revenons à nos chats. Maintenant qu'on a fait le côté POO, il faut s'occuper du côté BDD. En effet, si tu vas voir dans ton serveur MySQL, tu remarqueras que pour l'instant, il ne s'est rien passé dans ta base de données.
 
 Pour que les modifications de ton *modèle* soient prises en compte côté BDD, il faut dans un premier temps créer une migration. Ici encore, le *maker bundle* est là pour toi 🥰.
 
@@ -153,10 +153,9 @@ Maintenant, plus qu'à appliquer cette migration en lançant `bin/console doctri
 
 Une fois que tu as fait ça, vas voir dans ton serveur MySQL : ta base de données a bien été mise à jour avec la table `cat`, ainsi qu'une table auto-générée `doctrine_migration_versions`. En effet, cette table permet à Doctrine de savoir où il en est au niveau des migrations : lorsque tu lances `bin/console do:mi:mi`, Doctrine va commencer par aller vérifier s'il y a des migrations dans ton dossier `/migrations` qu'il ne trouve pas dans la table `doctrine_migration_versions`, et va simplement reprendre là où il s'était arrêté 🙂.
 
+### "LES CHIENS ONT DES MAÎTRES, LES CHATS ONT DES SERVITEURS"
 
-### "LES CHIENS ONT DES MAÎTRES, LES CHATS ONT DES SERVTEURS"
-
-Et voilà que tu as créé une première entité! Maintenant, compliquons un peu les choses 🙂. Disons que nous voulons aussi représenter les fidèles serviteurs des chats - les *"humains"* - et leurs relations ("maître" - "serviteur"). Imaginons donc qu'**un chat peut avoir plusieurs serviteurs**,  **un humain peut avoir plusieurs maîtres** (dans le cas d'une "garde partagée").
+Et voilà que tu as créé une première entité! Maintenant, compliquons un peu les choses 🙂. Disons que nous voulons aussi représenter les fidèles serviteurs des chats - les *"humains"* - et leurs relations ("maître" - "serviteur"). Imaginons donc qu'**un chat peut avoir plusieurs serviteurs**, et  **un humain peut avoir plusieurs maîtres** (dans le cas d'une "garde partagée").
 
 Nous allons donc créer une entité `Human` avec quelques propriétés :
 
@@ -165,7 +164,7 @@ Nous allons donc créer une entité `Human` avec quelques propriétés :
 
 et c'est tout.
 
-Pour cela, même démarche que pour la création de notre enntité `Cat` : on met à profit le *maker bundle*. Cependant, quand tu vas créer ta propriété `masters`, que va-t-on indiquer lorsque le *maker bundle* nous demandera le type de la propriété? Et bien tout est prévu : il te suffit d'indiquer le type *"relation"*, et le *maker bundle* te posera un quelques questions et te guidera dans la création de cette propriété 🤩 : 
+Pour cela, même démarche que pour la création de notre entité `Cat` : on met à profit le *maker bundle*. Cependant, quand tu vas créer ta propriété `masters`, que va-t-on indiquer lorsque le *maker bundle* nous demandera le type de la propriété? Et bien tout est prévu : il te suffit d'indiquer le type *"relation"*, et le *maker bundle* te posera quelques questions et te guidera dans la création de cette propriété 🤩 : 
 
 * en premier, il te demande quelle est l'entité avec laquelle cette relation sert de liaison, donc pour nous, `Cat`;
 
