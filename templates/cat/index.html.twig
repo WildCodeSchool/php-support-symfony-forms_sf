@@ -1,7 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container text-center d-flex flex-column align-items-center">
+    <div class="container col-8">
         <h1>Kittens! :3</h1>
+        <a href="{{ path('cat_add') }}">Add a cat!</a><br>
+        <a href="{{ path('human_add') }}">Add a human!</a>
+        <div class="row justify-content-around">
+            {% if cats %}
+                {% for cat in cats %}
+                    {% set servantsNumber = cat.servants|length %}
+                    <div class="col-4 my-3">
+                        <div class="card">
+                            <img src="{{ cat.url }}" class="card-img-top" alt="a cute cat">
+                            <div class="card-body">
+                                <h2 class="card-title">{{ cat.name }}</h2>
+                                <p class="card-text">
+                                    {% if cat.servants is not empty %}
+                                        {{ cat.name }}'s servant(s) :
+                                        {% for servant in cat.servants %}
+                                            {{ servant.name }}{% if servantsNumber != loop.index %},{% else %}.{% endif %}
+                                        {% endfor %}
+
+                                    {% else %}
+                                        {{ cat.name }} has no servant(s).
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                There are no cats yet! 🙁
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

@@ -2,48 +2,37 @@
 
 namespace App\Controller;
 
-use App\Entity\Cat;
-use App\Form\CatType;
-use App\Repository\CatRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\HumanRepository;
+use App\Form\HumanType;
+use App\Entity\Human;
 
 /**
- * @Route(name="cat_")
+ * @Route("/human", name="human_")
  */
-class CatController extends AbstractController
+class HumanController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
-     */
-    public function index(CatRepository $catRepository): Response
-    {
-        $cats = $catRepository->findAll();
-        return $this->render('cat/index.html.twig', [
-            'cats' => $cats,
-        ]);
-    }
-
-    /**
-     * @Route("/cat/add", name="add")
+     * @Route("/add", name="add")
      */
     public function add(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $cat = new Cat();
-        $form = $this->createForm(CatType::class, $cat);
+        $human = new Human();
+        $form = $this->createForm(HumanType::class, $human);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($cat);
+            $entityManager->persist($human);
             $entityManager->flush();
             return $this->redirectToRoute('cat_index');
         }
 
-        return $this->render('cat/add.html.twig', [
-            'cat' => $cat,
+        return $this->render('human/add.html.twig', [
+            'human' => $human,
             'form' => $form->createView(),
         ]);
     }
