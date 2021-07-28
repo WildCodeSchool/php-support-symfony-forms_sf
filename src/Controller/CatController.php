@@ -43,7 +43,6 @@ class CatController extends AbstractController
         }
 
         return $this->render('cat/add.html.twig', [
-            'cat' => $cat,
             'form' => $form->createView(),
         ]);
     }

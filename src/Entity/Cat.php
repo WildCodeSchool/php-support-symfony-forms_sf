@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CatRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,16 +33,6 @@ class Cat
      */
     private string $url;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Human::class, mappedBy="masters")
-     */
-    private Collection $servants;
-
-    public function __construct()
-    {
-        $this->servants = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -70,33 +58,6 @@ class Cat
     public function setUrl(string $url): self
     {
         $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Human[]
-     */
-    public function getServants(): Collection
-    {
-        return $this->servants;
-    }
-
-    public function addServant(Human $servant): self
-    {
-        if (!$this->servants->contains($servant)) {
-            $this->servants[] = $servant;
-            $servant->addMaster($this);
-        }
-
-        return $this;
-    }
-
-    public function removeServant(Human $servant): self
-    {
-        if ($this->servants->removeElement($servant)) {
-            $servant->removeMaster($this);
-        }
 
         return $this;
     }
